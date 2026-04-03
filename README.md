@@ -19,5 +19,16 @@ uvicorn app.main:app --reload --port 8001
 ## Current Endpoints
 - GET /
 - GET /buildings/
+- GET /buildings/{building_id}
+- POST /buildings/
 - GET /rooms/
+- GET /rooms/{room_id}
+- POST /rooms/
+- GET /users/
+- GET /users/{user_id}
+- POST /users/
+- GET /reservations/
+- GET /reservations/{reservation_id}
 - POST /reservations/
+- PUT /reservations/{reservation_id}
+- DELETE /reservations/{reservation_id}
