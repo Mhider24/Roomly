@@ -3,17 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>RSGF - Room Reservation</title>
+
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <style>
+        #map {
+            height: 80vh;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
+
     <h1>Room Reservation System</h1>
 
-    <h2>Buildings</h2>
+    <h2>Campus Map</h2>
+    <div id="map"></div>
+
+    <!-- Optional: keep these for debugging/backend -->
+    <h2>Buildings (Debug)</h2>
     <div id="building-list"></div>
 
-    <h2>Rooms</h2>
+    <h2>Rooms (Debug)</h2>
     <div id="room-list"></div>
 
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Your map code -->
+    <script src="js/map.js"></script>
+
+    <!-- Your backend logic -->
     <script type="module" src="js/app.js"></script>
+
 </body>
 </html>
