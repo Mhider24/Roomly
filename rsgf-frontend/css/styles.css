@@ -4,8 +4,89 @@ body {
 }
 
 button {
-    display: block;
-    margin: 5px 0;
-    padding: 8px;
+    border: 1px solid #888;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 15px;
+    min-width: 130px;
+    padding: 10px 14px;
+    white-space: nowrap;
+}
+
+button:hover:not(:disabled) {
+    background: #eeeeee;
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.floorplan-viewer {
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.floorplan-toolbar {
+    align-items: center;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 18px auto;
+    max-width: 900px;
+    width: 100%;
+}
+
+.floorplan-toolbar button:first-child {
+    order: 1;
+}
+
+.floorplan-status {
+    min-width: 170px;
+    order: 2;
+    text-align: center;
+}
+
+.floorplan-toolbar button:last-child {
+    order: 3;
+}
+
+.floorplan-status:only-child {
+    margin: 0 auto;
+}
+
+.floorplan-status h3,
+.floorplan-status p {
+    margin: 4px 0;
+}
+
+.floorplan-image {
+    border: 1px solid #ccc;
+    display: block;
+    height: auto;
+    margin: 0 auto;
+    width: 100%;
+}
+
+@media (max-width: 560px) {
+    body {
+        padding: 12px;
+    }
+
+    button {
+        font-size: 14px;
+        min-width: 105px;
+        padding: 9px 10px;
+    }
+
+    .floorplan-toolbar {
+        gap: 8px;
+        justify-content: space-between;
+    }
+
+    .floorplan-status {
+        min-width: 90px;
+    }
 }
