@@ -1,26 +1,26 @@
 const buildingNames = {
-    cb: "College of Arts, Sciences, and Letters", 
-    fhwc: "Fieldhouse / Wellness Center", 
-    ml: "Mardigian Library", 
-    ab: "Administration Building", 
+    cb: "College of Arts, Sciences, and Letters",
+    fhwc: "Fieldhouse / Wellness Center",
+    ml: "Mardigian Library",
+    ab: "Administration Building",
     elb: "England Engineering Lab Building",
-    pec: "Professional Education Center", 
-    ruc: "Renick University Center", 
-    nsb: "Natural Science Building", 
-    ssb: "Social Sciences Building", 
-    cis: "Computer & Information Science", 
-    apc: "Auxiliary Program Center", 
-    css: "Campus Support Services", 
-    eic: "Environmental Interpretive Center", 
-    iavs: "Institute for Advanced Vehicle Systems", 
-    msel: "Manufacturing Systems Engineering Lab", 
-    mrl: "Modular Research Lab", 
-    mps: "Monteith Parking Structure", 
-    nsbs: "Natural Sciences Building South", 
-    sfc: "Science Faculty Center", 
-    gb: "Grounds Building", 
-    slrc: "Science Learning and Research Center", 
-    hpec: "Heinz Prechter Engineering Complex", 
+    pec: "Professional Education Center",
+    ruc: "Renick University Center",
+    nsb: "Natural Science Building",
+    ssb: "Social Sciences Building",
+    cis: "Computer & Information Science",
+    apc: "Auxiliary Program Center",
+    css: "Campus Support Services",
+    eic: "Environmental Interpretive Center",
+    iavs: "Institute for Advanced Vehicle Systems",
+    msel: "Manufacturing Systems Engineering Lab",
+    mrl: "Modular Research Lab",
+    mps: "Monteith Parking Structure",
+    nsbs: "Natural Sciences Building South",
+    sfc: "Science Faculty Center",
+    gb: "Grounds Building",
+    slrc: "Science Learning and Research Center",
+    hpec: "Heinz Prechter Engineering Complex",
     ca: "CASL Annex",
     flc: "Fair Lane Cottages",
     flpb: "Fair Lane Pony Barn"
@@ -132,37 +132,45 @@ const buildingFloorplans = {
         "Keyplans/Keyplans/SLRC-5138/SLRC-4.png"
     ],
 
-    ab: [
-        
-    ],
+    ab: [],
+    apc: [],
+    eic: [],
+    msel: [],
+    mrl: [],
+    mps: [],
+    flc: [],
+    flpb: []
+};
 
-    apc: [
-        
-    ],
-
-    eic: [
-        
-    ],
-
-    msel: [
-        
-    ],
-
-    mrl: [
-        
-    ],
-
-    mps: [
-        
-    ],
-
-    flc: [
-        
-    ],
-
-    flpb: [
-        
-    ]
+const demoRooms = {
+    cb: {
+        0: [
+            { id: "1041", label: "Room 1041" },
+            { id: "1043", label: "Room 1043" },
+            { id: "1045", label: "Room 1045" }
+        ],
+        1: [
+            { id: "200", label: "Room 200" },
+            { id: "201", label: "Room 201" },
+            { id: "202", label: "Room 202" }
+        ]
+    },
+    ml: {
+        0: [
+            { id: "B01", label: "Room B01" },
+            { id: "B02", label: "Room B02" }
+        ],
+        1: [
+            { id: "101", label: "Room 101" },
+            { id: "102", label: "Room 102" }
+        ]
+    },
+    ruc: {
+        0: [
+            { id: "120", label: "Room 120" },
+            { id: "125", label: "Room 125" }
+        ]
+    }
 };
 
 let currentFloorIndex = 0;
@@ -179,13 +187,23 @@ function getFloorImagePath(floorplanPath) {
 function getFloorLabel(floorplanPath, index) {
     const fileName = floorplanPath.split("/").pop().replace(/\.png$/i, "");
     const normalizedName = fileName.toUpperCase();
-    const floorMatch = normalizedName.match(/(?:FLOOR\s*|[-_])(\d+)$/) || normalizedName.match(/(\d+)$/);
+    const floorMatch =
+        normalizedName.match(/(?:FLOOR\s*|[-_])(\d+)$/) ||
+        normalizedName.match(/(\d+)$/);
 
-    if (normalizedName.includes("BASEMENT") || normalizedName.endsWith("-B") || normalizedName.endsWith("B")) {
+    if (
+        normalizedName.includes("BASEMENT") ||
+        normalizedName.endsWith("-B") ||
+        normalizedName.endsWith("B")
+    ) {
         return "Basement";
     }
 
-    if (normalizedName.includes("PENTHOUSE") || normalizedName.endsWith("-PH") || normalizedName.endsWith("PH")) {
+    if (
+        normalizedName.includes("PENTHOUSE") ||
+        normalizedName.endsWith("-PH") ||
+        normalizedName.endsWith("PH")
+    ) {
         return "Penthouse";
     }
 
@@ -200,7 +218,41 @@ function getFloorLabel(floorplanPath, index) {
     return `Floor ${index + 1}`;
 }
 
-function renderFloorplan(floorplans, floorplanContainer) {
+function renderRoomButtons(buildingId, roomListElement) {
+    const roomsForFloor = demoRooms[buildingId]?.[currentFloorIndex] || [];
+
+    if (roomsForFloor.length === 0) {
+        roomListElement.innerHTML = `
+            <p>Selected building ID: <strong>${buildingId}</strong></p>
+            <p>No clickable rooms added for this floor yet.</p>
+        `;
+        return;
+    }
+
+    roomListElement.innerHTML = `
+        <p>Selected building ID: <strong>${buildingId}</strong></p>
+        <div class="room-buttons">
+            ${roomsForFloor.map(room => `
+                <button
+                    class="room-button"
+                    type="button"
+                    data-room-id="${room.id}"
+                >
+                    ${room.label}
+                </button>
+            `).join("")}
+        </div>
+    `;
+
+    document.querySelectorAll(".room-button").forEach(button => {
+        button.addEventListener("click", () => {
+            const roomId = button.dataset.roomId;
+            alert(`Clicked room ${roomId}`);
+        });
+    });
+}
+
+function renderFloorplan(buildingId, floorplans, floorplanContainer, roomListElement) {
     const floorplanPath = floorplans[currentFloorIndex];
     const floorLabel = getFloorLabel(floorplanPath, currentFloorIndex);
     const imagePath = getFloorImagePath(floorplanPath);
@@ -214,10 +266,12 @@ function renderFloorplan(floorplans, floorplanContainer) {
                         Down a floor
                     </button>
                 ` : ""}
+
                 <div class="floorplan-status">
                     <h3>${floorLabel}</h3>
                     <p>Floor ${currentFloorIndex + 1} of ${floorplans.length}</p>
                 </div>
+
                 ${hasMultipleFloors ? `
                     <button id="floor-up" type="button" ${currentFloorIndex === floorplans.length - 1 ? "disabled" : ""}>
                         Up a floor
@@ -233,18 +287,20 @@ function renderFloorplan(floorplans, floorplanContainer) {
         </section>
     `;
 
+    renderRoomButtons(buildingId, roomListElement);
+
     if (!hasMultipleFloors) {
         return;
     }
 
     document.getElementById("floor-down").addEventListener("click", () => {
         currentFloorIndex = Math.max(0, currentFloorIndex - 1);
-        renderFloorplan(floorplans, floorplanContainer);
+        renderFloorplan(buildingId, floorplans, floorplanContainer, roomListElement);
     });
 
     document.getElementById("floor-up").addEventListener("click", () => {
         currentFloorIndex = Math.min(floorplans.length - 1, currentFloorIndex + 1);
-        renderFloorplan(floorplans, floorplanContainer);
+        renderFloorplan(buildingId, floorplans, floorplanContainer, roomListElement);
     });
 }
 
@@ -268,14 +324,11 @@ function loadBuildingPage() {
 
     if (floorplans && floorplans.length > 0) {
         currentFloorIndex = 0;
-        renderFloorplan(floorplans, floorplanContainer);
+        renderFloorplan(buildingId, floorplans, floorplanContainer, roomListElement);
     } else {
         floorplanContainer.innerHTML = "<p>Building cannot be reserved.</p>";
+        renderRoomButtons(buildingId, roomListElement);
     }
-
-    roomListElement.innerHTML = `
-        <p>Selected building ID: <strong>${buildingId}</strong></p>
-    `;
 }
 
 loadBuildingPage();
