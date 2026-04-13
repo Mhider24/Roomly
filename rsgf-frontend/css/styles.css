@@ -70,6 +70,24 @@ button:disabled {
     width: 100%;
 }
 
+.room-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.room-button {
+    background: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    padding: 8px 12px;
+}
+
+.room-button:hover {
+    background: #f2f2f2;
+}
+
 @media (max-width: 560px) {
     body {
         padding: 12px;
@@ -88,5 +106,13 @@ button:disabled {
 
     .floorplan-status {
         min-width: 90px;
+    }
+
+    .room-buttons {
+        gap: 8px;
+    }
+
+    .room-button {
+        padding: 7px 10px;
     }
 }
