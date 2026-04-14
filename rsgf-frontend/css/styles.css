@@ -1,10 +1,29 @@
-body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
+:root {
+    --michigan-blue: #00274c;
+    --maize: #ffcb05;
+    --ink: #18212b;
+    --paper: #f7f8fb;
+    --line: #c9d3df;
 }
 
-button {
-    border: 1px solid #888;
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+button,
+.primary-action {
+    border: 1px solid var(--michigan-blue);
     border-radius: 6px;
     cursor: pointer;
     font-size: 15px;
@@ -13,9 +32,15 @@ button {
     white-space: nowrap;
 }
 
-button:hover:not(:disabled) {
-    background: #eeeeee;
-    cursor: pointer;
+button {
+    background: white;
+    color: var(--michigan-blue);
+}
+
+button:hover:not(:disabled),
+.primary-action:hover {
+    background: var(--maize);
+    color: var(--michigan-blue);
 }
 
 button:disabled {
@@ -23,14 +48,133 @@ button:disabled {
     opacity: 0.5;
 }
 
-/* Floorplan container */
+.site-header {
+    align-items: center;
+    background: var(--michigan-blue);
+    border-bottom: 4px solid var(--maize);
+    display: flex;
+    height: 72px;
+    left: 0;
+    padding: 0 24px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+.brand {
+    align-items: center;
+    color: white;
+    display: inline-flex;
+    font-size: 22px;
+    font-weight: 700;
+    gap: 12px;
+    letter-spacing: 0;
+    text-decoration: none;
+}
+
+.brand img {
+    background: var(--maize);
+    border-radius: 6px;
+    display: block;
+    height: 44px;
+    object-fit: contain;
+    padding: 5px;
+    width: 54px;
+}
+
+.landing-page {
+    align-items: center;
+    background:
+        linear-gradient(rgba(0, 39, 76, 0.35), rgba(0, 39, 76, 0.55)),
+        url("../assets/images/landing_page.png") center / cover no-repeat;
+    color: white;
+    display: flex;
+    min-height: 92vh;
+    padding: 120px 7vw 64px;
+}
+
+.landing-content {
+    max-width: 660px;
+}
+
+.eyebrow {
+    color: var(--maize);
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+}
+
+.landing-content h1 {
+    font-size: 56px;
+    line-height: 1.05;
+    margin: 0 0 18px;
+}
+
+.landing-content p:not(.eyebrow) {
+    font-size: 20px;
+    line-height: 1.5;
+    margin: 0 0 28px;
+    max-width: 560px;
+}
+
+.primary-action {
+    background: var(--maize);
+    color: var(--michigan-blue);
+    display: inline-block;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.map-section,
+.debug-section,
+.building-main {
+    margin: 0 auto;
+    max-width: 1240px;
+    padding: 32px 24px;
+}
+
+.debug-section {
+    display: none;
+}
+
+.map-section {
+    scroll-margin-top: 88px;
+}
+
+.map-section h2,
+.debug-section h2,
+.building-main h1 {
+    color: var(--michigan-blue);
+}
+
+#map {
+    border: 2px solid var(--michigan-blue);
+    height: 80vh;
+    width: 100%;
+}
+
+.building-page {
+    padding-top: 72px;
+}
+
+.back-link {
+    color: var(--michigan-blue);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
 .floorplan-viewer {
     margin: 0 auto;
     max-width: 1200px;
     width: 100%;
 }
 
-/* Toolbar (floor buttons + label) */
 .floorplan-toolbar {
     align-items: center;
     display: flex;
@@ -46,6 +190,7 @@ button:disabled {
 }
 
 .floorplan-status {
+    color: var(--michigan-blue);
     min-width: 170px;
     order: 2;
     text-align: center;
@@ -64,20 +209,34 @@ button:disabled {
     margin: 4px 0;
 }
 
-/* Leaflet floor map */
 #floor-map {
-    border: 1px solid #ccc;
+    background: white !important;
+    border: 2px solid var(--michigan-blue);
     height: 80vh;
     margin: 20px 0;
     width: 100%;
 }
 
-/* Room list section */
+#floor-map.leaflet-container,
+#floor-map .leaflet-control-container,
+#floor-map .leaflet-pane,
+#floor-map .leaflet-tile-pane,
+#floor-map .leaflet-overlay-pane {
+    background: white !important;
+}
+
+.floorplan-image {
+    border: 2px solid var(--michigan-blue);
+    display: block;
+    height: auto;
+    margin: 20px auto;
+    width: 100%;
+}
+
 #room-list {
     margin-top: 20px;
 }
 
-/* Room buttons (fallback / summary view) */
 .room-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -87,22 +246,50 @@ button:disabled {
 
 .room-button {
     background: white;
-    border: 1px solid #ccc;
+    border: 1px solid var(--line);
+    color: var(--michigan-blue);
     cursor: pointer;
     padding: 8px 12px;
 }
 
 .room-button:hover {
-    background: #f2f2f2;
+    background: var(--maize);
 }
 
-/* Mobile adjustments */
-@media (max-width: 560px) {
-    body {
-        padding: 12px;
+@media (max-width: 700px) {
+    .site-header {
+        height: 64px;
+        padding: 0 16px;
     }
 
-    button {
+    .brand {
+        font-size: 20px;
+    }
+
+    .brand img {
+        height: 38px;
+        width: 48px;
+    }
+
+    .landing-page {
+        min-height: 88vh;
+        padding: 100px 20px 48px;
+    }
+
+    .landing-content h1 {
+        font-size: 40px;
+    }
+
+    .landing-content p:not(.eyebrow) {
+        font-size: 18px;
+    }
+
+    .building-page {
+        padding-top: 64px;
+    }
+
+    button,
+    .primary-action {
         font-size: 14px;
         min-width: 105px;
         padding: 9px 10px;
@@ -117,7 +304,8 @@ button:disabled {
         min-width: 90px;
     }
 
-    #floor-map {
+    #floor-map,
+    #map {
         height: 65vh;
     }
 

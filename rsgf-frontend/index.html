@@ -2,33 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RSGF - Room Reservation</title>
 
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css?v=4">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
-    <style>
-        #map {
-            height: 80vh;
-            width: 100%;
-        }
-    </style>
 </head>
-<body>
+<body class="home-page">
 
-    <h1>Room Reservation System</h1>
+    <header class="site-header">
+        <a class="brand" href="index.html" aria-label="Roomly home">
+            <img src="assets/images/UofM_Icon.png" alt="University of Michigan block M">
+            <span>Roomly</span>
+        </a>
+    </header>
 
-    <h2>Campus Map</h2>
-    <div id="map"></div>
+    <main>
+        <section class="landing-page" aria-label="Welcome">
+            <div class="landing-content">
+                <p class="eyebrow">University of Michigan-Dearborn</p>
+                <h1>Find your next study room.</h1>
+                <p>Choose a building, explore the floorplan, and find an available room.</p>
+                <a class="primary-action" href="#campus-map">Find a Room</a>
+            </div>
+        </section>
 
-    <!-- Optional: keep these for debugging/backend -->
-    <h2>Buildings (Debug)</h2>
-    <div id="building-list"></div>
+        <section id="campus-map" class="map-section" aria-label="Campus map">
+            <h2>Campus Map</h2>
+            <div id="map"></div>
+        </section>
 
-    <h2>Rooms (Debug)</h2>
-    <div id="room-list"></div>
+        <section class="debug-section" aria-label="Backend data">
+            <h2>Buildings</h2>
+            <div id="building-list"></div>
+
+            <h2>Rooms</h2>
+            <div id="room-list"></div>
+        </section>
+    </main>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -37,7 +51,7 @@
     <script src="js/map.js"></script>
 
     <!-- Your backend logic -->
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/app.js?v=4"></script>
 
 </body>
 </html>

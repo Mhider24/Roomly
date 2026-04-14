@@ -663,8 +663,15 @@ function renderRoomSummary(buildingId, roomListElement) {
 function loadLeafletFloor(buildingId, floorplanPath) {
     const roomListElement = document.getElementById("room-list");
     const floorMapElement = document.getElementById("floor-map");
+    const floorImageElement = document.getElementById("floorplan-image");
 
     if (!floorMapElement) {
+        return;
+    }
+
+    if (!window.L) {
+        floorMapElement.remove();
+        renderRoomSummary(buildingId, roomListElement);
         return;
     }
 
@@ -680,7 +687,21 @@ function loadLeafletFloor(buildingId, floorplanPath) {
     });
 
     const bounds = [[0, 0], [1000, 2000]];
-    L.imageOverlay(floorplanPath, bounds).addTo(floorMap);
+    const imageOverlay = L.imageOverlay(floorplanPath, bounds).addTo(floorMap);
+    imageOverlay.on("load", () => {
+        if (floorImageElement) {
+            floorImageElement.hidden = true;
+        }
+    });
+    imageOverlay.on("error", () => {
+        floorMap.remove();
+        floorMap = null;
+        floorMapElement.remove();
+
+        if (floorImageElement) {
+            floorImageElement.hidden = false;
+        }
+    });
     floorMap.fitBounds(bounds);
 
     const rooms = roomOverlays[buildingId]?.[currentFloorIndex] || [];
@@ -740,6 +761,12 @@ function renderFloorplan(buildingId, floorplans, floorplanContainer) {
             </div>
 
             <div id="floor-map"></div>
+            <img
+                id="floorplan-image"
+                class="floorplan-image"
+                src="${floorplanPath}"
+                alt="${floorLabel} keyplan"
+            >
         </section>
     `;
 
