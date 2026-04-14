@@ -2,26 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Building View</title>
-    <link rel="stylesheet" href="css/styles.css?v=2">
+    <title>Building View - Room Reservation</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
+
     <h1>Building View</h1>
 
-    <p><a href="index.html">Back to Campus Map</a></p>
+    <p><a href="index.html">← Back to Campus Map</a></p>
 
     <h2 id="building-name">Loading building...</h2>
 
-    <div id="floorplan-container">
-        <p>Floorplan will go here later.</p>
-    </div>
+    <!-- Floorplan + controls get injected here -->
+    <div id="floorplan-container"></div>
 
     <h3>Rooms</h3>
     <div id="room-list">
         <p>No rooms loaded yet.</p>
     </div>
 
-    <script type="module" src="js/building.js?v=2"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Your logic -->
+    <script type="module" src="js/building.js"></script>
+
 </body>
 </html>
