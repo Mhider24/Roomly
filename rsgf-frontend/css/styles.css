@@ -23,12 +23,14 @@ button:disabled {
     opacity: 0.5;
 }
 
+/* Floorplan container */
 .floorplan-viewer {
     margin: 0 auto;
     max-width: 1200px;
     width: 100%;
 }
 
+/* Toolbar (floor buttons + label) */
 .floorplan-toolbar {
     align-items: center;
     display: flex;
@@ -62,14 +64,20 @@ button:disabled {
     margin: 4px 0;
 }
 
-.floorplan-image {
+/* Leaflet floor map */
+#floor-map {
     border: 1px solid #ccc;
-    display: block;
-    height: auto;
-    margin: 0 auto;
+    height: 80vh;
+    margin: 20px 0;
     width: 100%;
 }
 
+/* Room list section */
+#room-list {
+    margin-top: 20px;
+}
+
+/* Room buttons (fallback / summary view) */
 .room-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -88,6 +96,7 @@ button:disabled {
     background: #f2f2f2;
 }
 
+/* Mobile adjustments */
 @media (max-width: 560px) {
     body {
         padding: 12px;
@@ -106,6 +115,10 @@ button:disabled {
 
     .floorplan-status {
         min-width: 90px;
+    }
+
+    #floor-map {
+        height: 65vh;
     }
 
     .room-buttons {
