@@ -15,6 +15,7 @@ def get_buildings(db: Session = Depends(get_db)):
     return [
         {
             "id": b.id,
+            "code": b.code,
             "name": b.name,
         }
         for b in buildings
@@ -26,7 +27,11 @@ def get_building(building_id: int, db: Session = Depends(get_db)):
     building = db.query(Building).filter(Building.id == building_id).first()
     if not building:
         raise HTTPException(status_code=404, detail="Building not found.")
-    return {"id": building.id, "name": building.name}
+    return {
+        "id": building.id,
+        "code": building.code,
+        "name": building.name
+    }
 
 
 @router.post("/")
