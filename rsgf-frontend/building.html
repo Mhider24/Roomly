@@ -46,9 +46,49 @@
             </div>
         </main>
 
+        <div id="reservation-modal" class="modal-overlay" hidden>
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>Reserve Room <span id="modal-room-id"></span></h2>
+                    <button id="modal-close" type="button" aria-label="Close">&times;</button>
+                </div>
+
+                <form id="reservation-form" class="modal-form" novalidate>
+                    <input type="hidden" id="form-room-id">
+
+                    <label for="form-date">Date</label>
+                    <input type="date" id="form-date" required>
+
+                    <label for="form-start">Start Time</label>
+                    <input type="time" id="form-start" required>
+
+                    <label for="form-end">End Time</label>
+                    <input type="time" id="form-end" required>
+
+                    <label for="form-name">Reservation Name</label>
+                    <input type="text" id="form-name" placeholder="e.g. Study Group" required>
+
+                    <label for="form-umid">UMID</label>
+                    <input type="text" id="form-umid" placeholder="e.g. 12345678" required>
+
+                    <fieldset class="toggle-fieldset">
+                        <legend>Invite Type</legend>
+                        <label class="toggle-label">
+                            <input type="checkbox" id="form-open-invite">
+                            <span class="toggle-track"></span>
+                            <span id="toggle-text">Closed</span>
+                        </label>
+                    </fieldset>
+
+                    <div id="form-error" class="form-error" hidden></div>
+
+                    <button type="submit" class="btn-submit">Reserve Room</button>
+                </form>
+            </div>
+        </div>
+
         <!-- Leaflet JS -->
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
         <!-- Your logic -->
         <script type="module" src="js/building.js?v=5"></script>
         <script type="module" src="js/app.js?v=4"></script>
