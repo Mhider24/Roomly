@@ -1,9 +1,12 @@
 :root {
     --michigan-blue: #00274c;
     --maize: #ffcb05;
+    --maize: #d1a700;
     --ink: #18212b;
     --paper: #f7f8fb;
     --line: #c9d3df;
+    --warn: #e71515;
+    --warn-border: #c51414;
 }
 
 * {
@@ -30,6 +33,7 @@ button,
     min-width: 130px;
     padding: 10px 14px;
     white-space: nowrap;
+    transition: background 0.15s;
 }
 
 button {
@@ -125,6 +129,7 @@ button:disabled {
     display: inline-block;
     font-weight: 700;
     text-decoration: none;
+    transition: background 0.15s;
 }
 
 .map-section,

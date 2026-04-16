@@ -1,57 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSGF - Room Reservation</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>Building View - Room Reservation</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="icon" type="image" href="assets/images/UofM_Icon.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="css/styles.css?v=4">
+        <!-- Leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    </head>
+    <body class="home-page">
+        <div id="no-js-banner" style="
+        position: fixed; top: 0; left: 0; right: 0;
+        z-index: 99999;
+        background: #d80505;
+        color: #ffffff;
+        text-align: center;
+        padding: 1rem;
+        font-weight: bold;
+        ">
+        JavaScript is disabled. Please enable JavaScript to use Roomly.
+        </div>
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <header class="site-header">
+            <a class="brand" href="index.html" aria-label="Roomly home">
+                <img src="assets/images/UofM_Icon.png" alt="University of Michigan block M">
+                <span>Roomly</span>
+            </a>
+        </header>
 
-</head>
-<body class="home-page">
+        <main>
+            <section class="landing-page" aria-label="Welcome">
+                <div class="landing-content">
+                    <p class="eyebrow">University of Michigan-Dearborn</p>
+                    <h1>Find your next study room.</h1>
+                    <p>Choose a building, explore the floorplan, and find an available room.</p>
+                    <a class="primary-action" href="#campus-map">Find a Room</a>
+                </div>
+            </section>
 
-    <header class="site-header">
-        <a class="brand" href="index.html" aria-label="Roomly home">
-            <img src="assets/images/UofM_Icon.png" alt="University of Michigan block M">
-            <span>Roomly</span>
-        </a>
-    </header>
+            <section id="campus-map" class="map-section" aria-label="Campus map">
+                <h2>Campus Map</h2>
+                <div id="map"></div>
+            </section>
 
-    <main>
-        <section class="landing-page" aria-label="Welcome">
-            <div class="landing-content">
-                <p class="eyebrow">University of Michigan-Dearborn</p>
-                <h1>Find your next study room.</h1>
-                <p>Choose a building, explore the floorplan, and find an available room.</p>
-                <a class="primary-action" href="#campus-map">Find a Room</a>
-            </div>
-        </section>
+            <section class="debug-section" aria-label="Backend data">
+                <h2>Buildings</h2>
+                <div id="building-list"></div>
 
-        <section id="campus-map" class="map-section" aria-label="Campus map">
-            <h2>Campus Map</h2>
-            <div id="map"></div>
-        </section>
+                <h2>Rooms</h2>
+                <div id="room-list"></div>
+            </section>
+        </main>
 
-        <section class="debug-section" aria-label="Backend data">
-            <h2>Buildings</h2>
-            <div id="building-list"></div>
+        <!-- Leaflet JS -->
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-            <h2>Rooms</h2>
-            <div id="room-list"></div>
-        </section>
-    </main>
+        <!-- Your map code -->
+        <script src="js/map.js"></script>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-    <!-- Your map code -->
-    <script src="js/map.js"></script>
-
-    <!-- Your backend logic -->
-    <script type="module" src="js/app.js?v=4"></script>
-
-</body>
+        <!-- Your backend logic -->
+        <script type="module" src="js/app.js?v=4"></script>
+        <script> document.getElementById('no-js-banner').style.display = 'none'; </script>
+    </body>
 </html>

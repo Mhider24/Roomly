@@ -1,43 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Building View - Room Reservation</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>Building View - Room Reservation</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="icon" type="image" href="assets/images/UofM_Icon.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="css/styles.css?v=5">
+        <!-- Leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    </head>
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-</head>
-<body class="building-page">
-
-    <header class="site-header">
-        <a class="brand" href="index.html" aria-label="Roomly home">
-            <img src="assets/images/UofM_Icon.png" alt="University of Michigan block M">
-            <span>Roomly</span>
-        </a>
-    </header>
-
-    <main class="building-main">
-        <p><a class="back-link" href="index.html#campus-map">Back to Campus Map</a></p>
-
-        <h1 id="building-name">Loading building...</h1>
-
-        <!-- Floorplan + controls get injected here -->
-        <div id="floorplan-container"></div>
-
-        <h3>Rooms</h3>
-        <div id="room-list">
-            <p>No rooms loaded yet.</p>
+    <body class="building-page">
+        <div id="no-js-banner" style="
+        position: fixed; top: 0; left: 0; right: 0;
+        z-index: 99999;
+        background: #d80505;
+        color: #ffffff;
+        text-align: center;
+        padding: 1rem;
+        font-weight: bold;
+        ">
+        JavaScript is disabled. Please enable JavaScript to use Roomly.
         </div>
-    </main>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <header class="site-header">
+            <a class="brand" href="index.html" aria-label="Roomly home">
+                <img src="assets/images/UofM_Icon.png" alt="University of Michigan block M">
+                <span>Roomly</span>
+            </a>
+        </header>
 
-    <!-- Your logic -->
-    <script type="module" src="js/building.js?v=5"></script>
 
-</body>
+        <main class="building-main">
+            <p><a class="back-link" href="index.html#campus-map">Back to Campus Map</a></p>
+
+            <h1 id="building-name">Loading building...</h1>
+
+            <!-- Floorplan + controls get injected here -->
+            <div id="floorplan-container"></div>
+
+            <h3>Rooms</h3>
+            <div id="room-list">
+                <p>No rooms loaded yet.</p>
+            </div>
+        </main>
+
+        <!-- Leaflet JS -->
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+        <!-- Your logic -->
+        <script type="module" src="js/building.js?v=5"></script>
+        <script type="module" src="js/app.js?v=4"></script>
+        <script> document.getElementById('no-js-banner').style.display = 'none'; </script>
+    </body>
 </html>
