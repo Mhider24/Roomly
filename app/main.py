@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
 from app.models import Building, Room, User, Reservation
 from app.routes.building import router as buildings_router
@@ -13,6 +14,12 @@ app.include_router(rooms_router)
 app.include_router(reservations_router)
 app.include_router(buildings_router)
 app.include_router(users_router)
+app.add_middleware(                        
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")

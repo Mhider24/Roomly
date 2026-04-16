@@ -26,6 +26,13 @@ const buildingNames = {
     flpb: "Fair Lane Pony Barn"
 };
 
+const buildingBackendIds = {
+    cb: 1,
+    elb: 2,
+    iavs: 3,
+    // etc... match the order they were seeded into the DB!
+};
+
 const buildingFloorplans = {
     cb: [
         "Keyplans/Keyplans/CASL-1080/CASL-FLOOR 1.png",
@@ -150,6 +157,7 @@ const roomOverlays = {
             {
         id: "1410",
         status: "available",
+        locked: false,
         coords: [
             [476.9494022617124, 672],
             [476.9494022617124, 698],
@@ -160,6 +168,7 @@ const roomOverlays = {
     {
         id: "1420",
         status: "available",
+        locked: false,
         coords: [
             [526.4940226171244, 673],
             [526.4940226171244, 695],
@@ -170,6 +179,7 @@ const roomOverlays = {
     {
         id: "1430",
         status: "available",
+        locked: false,
         coords: [
             [582.5410662358643, 669],
             [583.5419063004847, 696],
@@ -180,6 +190,7 @@ const roomOverlays = {
     {
         id: "1440",
         status: "available",
+        locked: false,
         coords: [
             [640.5897899838449, 668],
             [638.5881098546042, 697],
@@ -190,6 +201,7 @@ const roomOverlays = {
     {
         id: "1560",
         status: "available",
+        locked: false,
         coords: [
             [435.41757673667206, 853],
             [436.4184168012924, 879],
@@ -200,6 +212,7 @@ const roomOverlays = {
     {
         id: "1310",
         status: "available",
+        locked: false,
         coords: [
             [611.06197092084, 978],
             [611.06197092084, 996],
@@ -210,6 +223,7 @@ const roomOverlays = {
     {
         id: "1330",
         status: "available",
+        locked: false,
         coords: [
             [635.0821324717285, 884],
             [633.0804523424879, 912],
@@ -220,6 +234,7 @@ const roomOverlays = {
     {
         id: "1340",
         status: "available",
+        locked: false,
         coords: [
             [605.0569305331179, 804],
             [607.0586106623587, 826],
@@ -230,6 +245,7 @@ const roomOverlays = {
     {
         id: "1550",
         status: "available",
+        locked: false,
         coords: [
             [557.0166074313408, 804],
             [557.0166074313408, 752],
@@ -240,6 +256,7 @@ const roomOverlays = {
     {
         id: "1530",
         status: "available",
+        locked: false,
         coords: [
             [587.0418093699516, 894],
             [587.0418093699516, 912],
@@ -250,6 +267,7 @@ const roomOverlays = {
     {
         id: "1540",
         status: "available",
+        locked: false,
         coords: [
             [528.993085621971, 892],
             [528.993085621971, 918],
@@ -260,6 +278,7 @@ const roomOverlays = {
     {
         id: "1000",
         status: "available",
+        locked: false,
         coords: [
             [583.0384491114701, 1048],
             [583.0384491114701, 1070],
@@ -270,6 +289,7 @@ const roomOverlays = {
     {
         id: "1200",
         status: "available",
+        locked: false,
         coords: [
             [559.0182875605815, 880],
             [559.0182875605815, 900],
@@ -280,6 +300,7 @@ const roomOverlays = {
     {
         id: "1010",
         status: "available",
+        locked: false,
         coords: [
             [681.120775444265, 980],
             [681.120775444265, 992],
@@ -290,6 +311,7 @@ const roomOverlays = {
     {
         id: "1020",
         status: "available",
+        locked: false,
         coords: [
             [689.1274959612279, 1022],
             [689.1274959612279, 1030],
@@ -299,7 +321,8 @@ const roomOverlays = {
     },
     {
         id: "1030",
-        status: "available",
+        status: "unavailable",
+        locked: true,
         coords: [
             [685.1241357027463, 1062],
             [685.1241357027463, 1074],
@@ -310,6 +333,7 @@ const roomOverlays = {
     {
         id: "1510",
         status: "available",
+        locked: false,
         coords: [
             [667.1090145395799, 1036],
             [665.1073344103393, 1058],
@@ -320,6 +344,7 @@ const roomOverlays = {
     {
         id: "1500",
         status: "available",
+        locked: false,
         coords: [
             [651.272633279483, 1027.5],
             [651.7730533117932, 1049.5],
@@ -330,6 +355,7 @@ const roomOverlays = {
     {
         id: "1S01",
         status: "available",
+        locked: false,
         coords: [
             [617.7444911147011, 1030.5],
             [616.7436510500808, 1038.5],
@@ -340,6 +366,7 @@ const roomOverlays = {
     {
         id: "1140",
         status: "available",
+        locked: false,
         coords: [
             [513.3990953150242, 842],
             [513.3990953150242, 848],
@@ -350,6 +377,7 @@ const roomOverlays = {
     {
         id: "1150",
         status: "available",
+        locked: false,
         coords: [
             [513.3990953150242, 789],
             [514.3999353796446, 797],
@@ -359,7 +387,8 @@ const roomOverlays = {
     },
     {
         id: "1170",
-        status: "available",
+        status: "unavailable",
+        locked: true,
         coords: [
             [455.3503715670436, 814],
             [454.34953150242325, 838],
@@ -370,6 +399,7 @@ const roomOverlays = {
     {
         id: "1600",
         status: "available",
+        locked: false,
         coords: [
             [466.3596122778675, 773],
             [466.3596122778675, 792],
@@ -380,6 +410,7 @@ const roomOverlays = {
     {
         id: "1110",
         status: "available",
+        locked: false,
         coords: [
             [484.95612277867525, 1036],
             [482.95444264943455, 1056],
@@ -390,6 +421,7 @@ const roomOverlays = {
     {
         id: "1120",
         status: "available",
+        locked: false,
         coords: [
             [482.95444264943455, 960],
             [482.95444264943455, 988],
@@ -400,6 +432,7 @@ const roomOverlays = {
     {
         id: "1130",
         status: "available",
+        locked: false,
         coords: [
             [484.95612277867525, 890],
             [484.95612277867525, 914],
@@ -413,6 +446,7 @@ const roomOverlays = {
             {
                 id: "2010",
                 status: "available",
+                locked: false,
                 coords: [
                     [680.5654281098546, 1090],
                     [678.2806138933764, 1125.5],
@@ -423,6 +457,7 @@ const roomOverlays = {
             {
                 id: "2020",
                 status: "available",
+                locked: false,
                 coords: [
                     [677.5326655896607, 1155],
                     [676.5318255250404, 1180],
@@ -433,6 +468,7 @@ const roomOverlays = {
             {
                 id: "2000",
                 status: "available",
+                locked: false,
                 coords: [
                     [631.4940226171244, 1090],
                     [632.4948626817447, 1121],
@@ -443,6 +479,7 @@ const roomOverlays = {
             {
                 id: "2S01",
                 status: "available",
+                locked: false,
                 coords: [
                     [649.5091437802907, 1139],
                     [650.5099838449112, 1149],
@@ -453,6 +490,7 @@ const roomOverlays = {
             {
                 id: "2030",
                 status: "available",
+                locked: false,
                 coords: [
                     [644.504943457189, 1173],
                     [644.504943457189, 1183],
@@ -463,6 +501,7 @@ const roomOverlays = {
             {
                 id: "2040",
                 status: "available",
+                locked: false,
                 coords: [
                     [613.478901453958, 1160],
                     [617.4822617124394, 1184],
@@ -473,6 +512,7 @@ const roomOverlays = {
             {
                 id: "2050",
                 status: "available",
+                locked: false,
                 coords: [
                     [581.4520193861066, 1160],
                     [582.4528594507269, 1183],
@@ -483,6 +523,7 @@ const roomOverlays = {
             {
                 id: "2E01",
                 status: "available",
+                locked: false,
                 coords: [
                     [556.4310177705977, 1114],
                     [556.4310177705977, 1114],
@@ -493,6 +534,7 @@ const roomOverlays = {
             {
                 id: "2520",
                 status: "available",
+                locked: false,
                 coords: [
                     [563.481421647819, 1131],
                     [563.481421647819, 1145],
@@ -503,6 +545,7 @@ const roomOverlays = {
             {
                 id: "2510",
                 status: "available",
+                locked: false,
                 coords: [
                     [554.4738610662358, 1159],
                     [555.4747011308561, 1182],
@@ -513,6 +556,7 @@ const roomOverlays = {
             {
                 id: "2120",
                 status: "available",
+                locked: false,
                 coords: [
                     [531.4545395799677, 1106],
                     [521.4461389337641, 1116],
@@ -523,6 +567,7 @@ const roomOverlays = {
             {
                 id: "2060",
                 status: "available",
+                locked: false,
                 coords: [
                     [527.7285298869144, 1159],
                     [526.727689822294, 1185],
@@ -533,6 +578,7 @@ const roomOverlays = {
             {
                 id: "2100",
                 status: "available",
+                locked: false,
                 coords: [
                     [506.35523424878835, 1085.5],
                     [506.10502423263324, 1096.5],
@@ -543,6 +589,7 @@ const roomOverlays = {
             {
                 id: "2100",
                 status: "available",
+                locked: false,
                 coords: [
                     [476.2041680129241, 1087],
                     [476.2041680129241, 1094],
@@ -553,6 +600,7 @@ const roomOverlays = {
             {
                 id: "2090",
                 status: "available",
+                locked: false,
                 coords: [
                     [478.20584814216477, 1109.5],
                     [478.20584814216477, 1120],
@@ -563,6 +611,7 @@ const roomOverlays = {
             {
                 id: "2070",
                 status: "available",
+                locked: false,
                 coords: [
                     [495.720549273021, 1163],
                     [495.720549273021, 1178.5],
@@ -573,6 +622,7 @@ const roomOverlays = {
             {
                 id: "2080",
                 status: "available",
+                locked: false,
                 coords: [
                     [464.19408723747983, 1147.5],
                     [464.19408723747983, 1171],
@@ -585,6 +635,7 @@ const roomOverlays = {
             {
                 id: "3000",
                 status: "available",
+                locked: false,
                 coords: [
                     [541.0031663974152, 1010],
                     [536.9998061389338, 1030],
@@ -787,7 +838,7 @@ function renderFloorplan(buildingId, floorplans, floorplanContainer) {
     });
 }
 
-function loadBuildingPage() {
+async function loadBuildingPage() {
     const buildingId = getBuildingIdFromUrl();
     const buildingNameElement = document.getElementById("building-name");
     const floorplanContainer = document.getElementById("floorplan-container");
@@ -802,6 +853,32 @@ function loadBuildingPage() {
 
     const buildingName = buildingNames[buildingId] || `Unknown Building (${buildingId})`;
     buildingNameElement.textContent = buildingName;
+
+
+    let backendId = null;
+    try{
+    const allBuildings = await fetch("http://localhost:8000/buildings/").then(r => r.json());
+    const match = allBuildings.find(b => b.name === buildingNames[buildingId]);
+    backendId = match?.id;
+    } catch (err) {
+        console.error("Backend fetch failed:", err);//Bugfinder3000
+    }
+    
+    if (backendId) {
+        const backendRooms = await fetch(`http://localhost:8000/rooms/?building_id=${backendId}`).then(r => r.json());
+        const today = new Date().toISOString().split("T")[0];
+
+        for (const floorIndex in roomOverlays[buildingId] || {}) {
+            for (const room of roomOverlays[buildingId][floorIndex]) {
+                if (room.locked) continue; 
+                const backendRoom = backendRooms.find(r => r.room_number === room.id);
+                if (backendRoom) {
+                    const reservations = await fetch(`http://localhost:8000/reservations/?room_id=${backendRoom.id}&date=${today}`).then(r => r.json());
+                    room.status = reservations.length > 0 ? "unavailable" : "available";
+                }
+            }
+        }
+    }
 
     const floorplans = buildingFloorplans[buildingId];
 
