@@ -55,7 +55,6 @@ button:disabled {
 .site-header {
     align-items: center;
     background: var(--michigan-blue);
-    border-bottom: 4px solid var(--maize);
     display: flex;
     height: 72px;
     left: 0;
@@ -64,6 +63,35 @@ button:disabled {
     right: 0;
     top: 0;
     z-index: 1000;
+}
+
+.main-nav {
+    align-items: center;
+    background: var(--maize);
+    display: flex;
+    gap: 48px;
+    height: 48px;
+    justify-content: center;
+    left: 0;
+    padding: 0 24px;
+    position: absolute;
+    right: 0;
+    top: 72px;
+}
+
+.main-nav a {
+    color: var(--michigan-blue);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+    padding: 14px 18px;
+    text-decoration: none;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+    text-decoration: underline;
+    text-underline-offset: 4px;
 }
 
 .brand {
@@ -95,7 +123,7 @@ button:disabled {
     color: white;
     display: flex;
     min-height: 92vh;
-    padding: 120px 7vw 64px;
+    padding: 168px 7vw 64px;
 }
 
 .landing-content {
@@ -145,7 +173,7 @@ button:disabled {
 }
 
 .map-section {
-    scroll-margin-top: 88px;
+    scroll-margin-top: 136px;
 }
 
 .map-section h2,
@@ -161,7 +189,66 @@ button:disabled {
 }
 
 .building-page {
-    padding-top: 72px;
+    padding-top: 120px;
+}
+
+.interior-page {
+    padding-top: 120px;
+}
+
+.empty-page {
+    min-height: calc(100vh - 120px);
+}
+
+.about-main {
+    margin: 0 auto;
+    max-width: 1120px;
+    min-height: calc(100vh - 120px);
+    padding: 48px 24px;
+}
+
+.about-hero {
+    background: var(--michigan-blue);
+    border-bottom: 8px solid var(--maize);
+    color: white;
+    padding: 48px;
+}
+
+.about-hero h1 {
+    font-size: 42px;
+    line-height: 1.1;
+    margin: 0 0 18px;
+}
+
+.about-hero p:not(.eyebrow) {
+    font-size: 19px;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 760px;
+}
+
+.about-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 24px;
+}
+
+.about-grid article {
+    background: white;
+    border: 1px solid var(--line);
+    border-top: 6px solid var(--maize);
+    padding: 24px;
+}
+
+.about-grid h2 {
+    color: var(--michigan-blue);
+    margin: 0 0 12px;
+}
+
+.about-grid p {
+    line-height: 1.55;
+    margin: 0;
 }
 
 .back-link {
@@ -389,6 +476,19 @@ button:disabled {
         padding: 0 16px;
     }
 
+    .main-nav {
+        gap: 0;
+        height: 44px;
+        justify-content: space-around;
+        padding: 0;
+        top: 64px;
+    }
+
+    .main-nav a {
+        font-size: 14px;
+        padding: 13px 10px;
+    }
+
     .brand {
         font-size: 20px;
     }
@@ -400,7 +500,7 @@ button:disabled {
 
     .landing-page {
         min-height: 88vh;
-        padding: 100px 20px 48px;
+        padding: 144px 20px 48px;
     }
 
     .landing-content h1 {
@@ -412,7 +512,32 @@ button:disabled {
     }
 
     .building-page {
-        padding-top: 64px;
+        padding-top: 108px;
+    }
+
+    .interior-page {
+        padding-top: 108px;
+    }
+
+    .empty-page {
+        min-height: calc(100vh - 108px);
+    }
+
+    .about-main {
+        min-height: calc(100vh - 108px);
+        padding: 28px 16px;
+    }
+
+    .about-hero {
+        padding: 32px 20px;
+    }
+
+    .about-hero h1 {
+        font-size: 34px;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
     }
 
     button,
