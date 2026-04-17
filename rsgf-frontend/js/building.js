@@ -28,6 +28,13 @@ const buildingNames = {
     flpb: "Fair Lane Pony Barn"
 };
 
+const buildingBackendIds = {
+    cb: 1,
+    elb: 2,
+    iavs: 3,
+    // etc... match the order they were seeded into the DB!
+};
+
 const buildingFloorplans = {
     cb: [
         "Keyplans/Keyplans/CASL-1080/CASL-FLOOR 1.png",
@@ -515,6 +522,7 @@ const roomOverlays = {
             {
                 id: "2120",
                 status: "available",
+                locked: false,
                 coords: [
                     [211.4621055735771, 742],
                     [207.46092598053667, 854],
@@ -525,6 +533,7 @@ const roomOverlays = {
             {
                 id: "2060",
                 status: "available",
+                locked: false,
                 coords: [
         [0, 0],
         [0, 0],
@@ -535,6 +544,7 @@ const roomOverlays = {
             {
                 id: "2100",
                 status: "available",
+                locked: false,
                 coords: [
         [0, 0],
         [0, 0],
@@ -545,6 +555,7 @@ const roomOverlays = {
             {
                 id: "2100",
                 status: "available",
+                locked: false,
                 coords: [
         [0, 0],
         [0, 0],
@@ -555,6 +566,7 @@ const roomOverlays = {
             {
                 id: "2090",
                 status: "available",
+                locked: false,
                 coords: [
         [0, 0],
         [0, 0],
@@ -565,6 +577,7 @@ const roomOverlays = {
             {
                 id: "2070",
                 status: "available",
+                locked: false,
                 coords: [
         [0, 0],
         [0, 0],
@@ -575,6 +588,7 @@ const roomOverlays = {
             {
                 id: "2080",
                 status: "available",
+                locked: false,
                 coords: [
         [0, 0],
         [0, 0],
@@ -587,6 +601,7 @@ const roomOverlays = {
             {
                 id: "3000",
                 status: "available",
+                locked: false,
                 coords: [
                     [941.6773813034504, 606],
                     [937.6762017104099, 804],
@@ -1001,6 +1016,94 @@ function getFloorLabel(floorplanPath, index) {
     return `Floor ${index + 1}`;
 }
 
+function renderRoomSummary(buildingId, roomListElement) {
+    const rooms = roomOverlays[buildingId]?.[currentFloorIndex] || [];
+
+    if (rooms.length === 0) {
+        roomListElement.innerHTML = `
+            <p>No room overlays added for this floor yet.</p>
+        `;
+        return;
+    }
+
+    roomListElement.innerHTML = `
+        <p>Blue rooms are available. Red rooms are unavailable.</p>
+        <ul>
+            ${rooms.map(room => `<li>${room.id} - ${room.status}</li>`).join("")}
+        </ul>
+    `;
+}
+
+
+    function openReservationForm(roomId) {
+        document.getElementById("modal-room-id").textContent = roomId;
+        document.getElementById("form-room-id").value = roomId;
+        document.getElementById("form-date").value = new Date().toISOString().split("T")[0];
+        document.getElementById("form-error").hidden = true;
+        document.getElementById("reservation-modal").hidden = false;
+    }
+
+    document.getElementById("modal-close").addEventListener("click", () => {
+        document.getElementById("reservation-modal").hidden = true;
+    });
+
+    document.getElementById("reservation-modal").addEventListener("click", (e) => {
+        if (e.target === e.currentTarget) {
+            e.currentTarget.hidden = true;  // click outside to close
+        }
+    });
+
+    document.getElementById("form-open-invite").addEventListener("change", function () {
+        document.getElementById("toggle-text").textContent = this.checked ? "Open" : "Closed";
+    });
+
+    document.getElementById("reservation-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const roomId   = document.getElementById("form-room-id").value;
+        const date     = document.getElementById("form-date").value;
+        const start    = document.getElementById("form-start").value;
+        const end      = document.getElementById("form-end").value;
+        const name     = document.getElementById("form-name").value.trim();
+        const umid     = document.getElementById("form-umid").value.trim();
+        const isOpen   = document.getElementById("form-open-invite").checked;
+        const errorEl  = document.getElementById("form-error");
+
+        if (end <= start) {
+            errorEl.textContent = "End time must be after start time.";
+            errorEl.hidden = false;
+            return;
+        }
+
+        try {
+            const res = await fetch("http://localhost:8000/reservations/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    room_number: roomId,
+                    date,
+                    start_time: start,
+                    end_time: end,
+                    reservation_name: name,
+                    um_id: umid,
+                    open_invite: isOpen
+                })
+            });
+
+            if (!res.ok) throw new Error(await res.text());
+
+            document.getElementById("reservation-modal").hidden = true;
+            alert(`Room ${roomId} reserved successfully!`);
+            loadBuildingPage();  // refresh statuses
+
+        } catch (err) {
+            errorEl.textContent = "Reservation failed: " + err.message;
+            errorEl.hidden = false;
+        }
+    });
+
+
+
 function loadLeafletFloor(buildingId, floorplanPath) {
     const floorMapElement = document.getElementById("floor-map");
 
@@ -1053,7 +1156,7 @@ function loadLeafletFloor(buildingId, floorplanPath) {
 
         if (room.status === "available") {
             polygon.on("click", function () {
-                alert(`Clicked room ${room.id}`);
+                openReservationForm(room.id);
             });
         }
     });
@@ -1125,6 +1228,32 @@ async function loadBuildingPage() {
 
     const buildingName = buildingNames[buildingId] || `Unknown Building (${buildingId})`;
     buildingNameElement.textContent = buildingName;
+
+
+    let backendId = null;
+    try{
+    const allBuildings = await fetch("http://localhost:8000/buildings/").then(r => r.json());
+    const match = allBuildings.find(b => b.name === buildingNames[buildingId]);
+    backendId = match?.id;
+    } catch (err) {
+        console.error("Backend fetch failed:", err);//Bugfinder3000
+    }
+    
+    if (backendId) {
+        const backendRooms = await fetch(`http://localhost:8000/rooms/?building_id=${backendId}`).then(r => r.json());
+        const today = new Date().toISOString().split("T")[0];
+
+        for (const floorIndex in roomOverlays[buildingId] || {}) {
+            for (const room of roomOverlays[buildingId][floorIndex]) {
+                if (room.locked) continue; 
+                const backendRoom = backendRooms.find(r => r.room_number === room.id);
+                if (backendRoom) {
+                    const reservations = await fetch(`http://localhost:8000/reservations/?room_id=${backendRoom.id}&date=${today}`).then(r => r.json());
+                    room.status = reservations.length > 0 ? "unavailable" : "available";
+                }
+            }
+        }
+    }
 
     const floorplans = buildingFloorplans[buildingId];
 

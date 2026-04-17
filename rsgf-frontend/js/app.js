@@ -1,9 +1,10 @@
 import { getBuildings, getRooms } from "./api.js";
 
 async function loadBuildings() {
-    const buildings = await getBuildings();
-    const container = document.getElementById("building-list");
 
+    const container = document.getElementById("building-list");
+    if (!container) return;//Crash preventor 3000
+    const buildings = await getBuildings();
     container.innerHTML = "";
 
     buildings.forEach(b => {
