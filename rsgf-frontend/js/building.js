@@ -1103,7 +1103,7 @@ function renderRoomSummary(buildingId, roomListElement) {
                 end_time: end,
                 reservation_name: name,
                 umid: umid,
-                open_invite: isOpen
+                is_open: isOpen
             })
             });
 
