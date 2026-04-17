@@ -9,12 +9,29 @@ Roomly is a campus room reservation system.
 4. Seed database
 5. Run server
 
-## Commands
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-python -m app.seed.seed_data
-uvicorn app.main:app --reload --port 8001
+## Commands 
+
+### Running the Backend
+Create a powershell terminal that faces the `root` folder. (In this instance, it should be `Roomly`, or something similar.)
+Open `powershell` in one terminal
+run:
+
+`python -m venv venv`
+
+`.\venv\Scripts\Activate.ps1`
+
+`pip install -r requirements.txt`
+
+`python -m app.seed.seed_data`
+
+`uvicorn app.main:app --reload --port 8001`
+
+
+### Running the Frontend
+Open the `bash` terminal in the `rsgf-frontend` folder.
+run:
+
+`python -m http.server 3000`
 
 ## Current Endpoints
 - GET /
