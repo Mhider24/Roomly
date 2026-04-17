@@ -317,14 +317,6 @@ button:disabled {
     background: white !important;
 }
 
-.floorplan-image {
-    border: 2px solid var(--michigan-blue);
-    display: block;
-    height: auto;
-    margin: 20px auto;
-    width: 100%;
-}
-
 #room-list {
     margin-top: 20px;
 }
