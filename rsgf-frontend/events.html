@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events - Roomly</title>
-    <link rel="stylesheet" href="css/styles.css?v=6">
+    <link rel="stylesheet" href="css/styles.css?v=14">
 </head>
 <body class="interior-page">
     <header class="site-header">
@@ -19,6 +19,21 @@
         </nav>
     </header>
 
-    <main class="empty-page" aria-label="Events"></main>
+    <main class="events-main" aria-label="Open reservations">
+        <section class="events-hero">
+            <p class="eyebrow">Open Reservations</p>
+            <h1>Join a room already in motion.</h1>
+            <p>Find open study sessions, project meetups, and club rooms that students have made available to join.</p>
+        </section>
+
+        <section class="events-toolbar" aria-label="Events status">
+            <h2>Available Events</h2>
+            <p id="events-count">Loading open reservations...</p>
+        </section>
+
+        <section id="events-list" class="events-grid" aria-live="polite"></section>
+    </main>
+
+    <script type="module" src="js/events.js?v=1"></script>
 </body>
 </html>

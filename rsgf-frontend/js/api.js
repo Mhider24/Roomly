@@ -14,6 +14,27 @@ export async function getRooms(buildingId) {
     return res.json();
 }
 
+// Get all rooms
+export async function getAllRooms() {
+    const res = await fetch(`${BASE_URL}/rooms/`);
+    if (!res.ok) throw new Error("Failed to load rooms");
+    return res.json();
+}
+
+// Get users
+export async function getUsers() {
+    const res = await fetch(`${BASE_URL}/users/`);
+    if (!res.ok) throw new Error("Failed to load users");
+    return res.json();
+}
+
+// Get reservations
+export async function getReservations() {
+    const res = await fetch(`${BASE_URL}/reservations/`);
+    if (!res.ok) throw new Error("Failed to load reservations");
+    return res.json();
+}
+
 // Create reservation
 export async function createReservation(data) {
     const res = await fetch(`${BASE_URL}/reservations/`, {
