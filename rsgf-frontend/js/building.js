@@ -1075,22 +1075,42 @@ function renderRoomSummary(buildingId, roomListElement) {
             return;
         }
 
+        const buildingCode = getBuildingIdFromUrl();
+        const allBuildings = await getBuildings();
+        const matchedBuilding = allBuildings.find(
+            b => b.code?.toLowerCase() === buildingCode.toLowerCase()
+        );
+
+        if (!matchedBuilding) {
+            throw new Error("Could not find backend building.");
+        }
+
+        const backendRooms = await getRooms(matchedBuilding.id);
+        const backendRoom = backendRooms.find(r => r.room_number === roomId);
+
+        if (!backendRoom) {
+            throw new Error(`Could not find backend room for room ${roomId}.`);
+        }
+
         try {
-            const res = await fetch("http://localhost:8000/reservations/", {
+            const res = await fetch("http://127.0.0.1:8001/reservations/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    room_number: roomId,
-                    date,
-                    start_time: start,
-                    end_time: end,
-                    reservation_name: name,
-                    um_id: umid,
-                    open_invite: isOpen
-                })
+                room_id: backendRoom.id,
+                date,
+                start_time: start,
+                end_time: end,
+                reservation_name: name,
+                umid: umid,
+                open_invite: isOpen
+            })
             });
 
             if (!res.ok) throw new Error(await res.text());
+
+            errorEl.hidden = true;
+            errorEl.textContent = "";
 
             document.getElementById("reservation-modal").hidden = true;
             alert(`Room ${roomId} reserved successfully!`);
@@ -1232,7 +1252,7 @@ async function loadBuildingPage() {
 
     let backendId = null;
     try{
-    const allBuildings = await fetch("http://localhost:8000/buildings/").then(r => r.json());
+    const allBuildings = await fetch("http://127.0.0.1:8001/buildings/").then(r => r.json());
     const match = allBuildings.find(b => b.name === buildingNames[buildingId]);
     backendId = match?.id;
     } catch (err) {
@@ -1240,7 +1260,7 @@ async function loadBuildingPage() {
     }
     
     if (backendId) {
-        const backendRooms = await fetch(`http://localhost:8000/rooms/?building_id=${backendId}`).then(r => r.json());
+        const backendRooms = await fetch(`http://127.0.0.1:8001/rooms/?building_id=${backendId}`).then(r => r.json());
         const today = new Date().toISOString().split("T")[0];
 
         for (const floorIndex in roomOverlays[buildingId] || {}) {
@@ -1248,7 +1268,7 @@ async function loadBuildingPage() {
                 if (room.locked) continue; 
                 const backendRoom = backendRooms.find(r => r.room_number === room.id);
                 if (backendRoom) {
-                    const reservations = await fetch(`http://localhost:8000/reservations/?room_id=${backendRoom.id}&date=${today}`).then(r => r.json());
+                    const reservations = await fetch(`http://127.0.0.1:8001/reservations/?room_id=${backendRoom.id}&date=${today}`).then(r => r.json());
                     room.status = reservations.length > 0 ? "unavailable" : "available";
                 }
             }
@@ -1267,8 +1287,8 @@ async function loadBuildingPage() {
     try {
         const buildings = await getBuildings();
 
-        const matchedBuilding = buildings.find(
-            b => b.code?.toLowerCase() === buildingId.toLowerCase()
+        const matchedBuilding = allBuildings.find(
+             b => b.name === buildingNames[buildingCode]
         );
 
         if (!matchedBuilding) {
