@@ -59,15 +59,25 @@ def get_reservation(reservation_id: int, db: Session = Depends(get_db)):
     }
 
 
-def check_overlap(db: Session, room_id: int, date_value: date, start_time, end_time, exclude_id: int | None = None):
+def check_overlap(
+    db: Session,
+    room_id: int,
+    date_value: date,
+    start_time,
+    end_time,
+    exclude_id: int | None = None,
+):
     query = db.query(Reservation).filter(
         Reservation.room_id == room_id,
         Reservation.date == date_value,
+        Reservation.status == "booked",
         Reservation.start_time < end_time,
         Reservation.end_time > start_time,
     )
+
     if exclude_id is not None:
         query = query.filter(Reservation.id != exclude_id)
+
     return db.query(query.exists()).scalar()
 
 
@@ -80,9 +90,15 @@ def create_reservation(data: ReservationCreate, db: Session = Depends(get_db)):
     if not room:
         raise HTTPException(status_code=404, detail="Room not found.")
 
+    if not room.is_reservable:
+        raise HTTPException(status_code=400, detail="Room is not reservable.")
+
     user = db.query(User).filter(User.umid == data.umid).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found.")
+        user = User(umid=data.umid, name=f"User {data.umid}")
+        db.add(user)
+        db.commit()
+        db.refresh(user)
 
     if check_overlap(db, data.room_id, data.date, data.start_time, data.end_time):
         raise HTTPException(status_code=400, detail="Time slot is already reserved.")
@@ -110,6 +126,13 @@ def update_reservation(reservation_id: int, data: ReservationUpdate, db: Session
     if not reservation:
         raise HTTPException(status_code=404, detail="Reservation not found.")
 
+    valid_statuses = {"booked", "cancelled"}
+
+    if data.status is not None:
+        if data.status not in valid_statuses:
+            raise HTTPException(status_code=400, detail="Invalid reservation status.")
+        reservation.status = data.status
+
     if data.start_time is not None:
         reservation.start_time = data.start_time
     if data.end_time is not None:
@@ -118,8 +141,6 @@ def update_reservation(reservation_id: int, data: ReservationUpdate, db: Session
         reservation.date = data.date
     if data.is_open is not None:
         reservation.is_open = data.is_open
-    if data.status is not None:
-        reservation.status = data.status
 
     if reservation.start_time >= reservation.end_time:
         raise HTTPException(status_code=400, detail="End time must be after start time.")

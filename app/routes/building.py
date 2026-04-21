@@ -36,11 +36,15 @@ def get_building(building_id: int, db: Session = Depends(get_db)):
 
 @router.post("/")
 def create_building(data: BuildingCreate, db: Session = Depends(get_db)):
-    existing_building = db.query(Building).filter(Building.name == data.name).first()
-    if existing_building:
+    existing_name = db.query(Building).filter(Building.name == data.name).first()
+    if existing_name:
         raise HTTPException(status_code=400, detail="Building with this name already exists.")
 
-    building = Building(name=data.name)
+    existing_code = db.query(Building).filter(Building.code == data.code).first()
+    if existing_code:
+        raise HTTPException(status_code=400, detail="Building with this code already exists.")
+
+    building = Building(code=data.code, name=data.name)
     db.add(building)
     db.commit()
     db.refresh(building)

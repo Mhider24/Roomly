@@ -55,6 +55,14 @@ def get_room(room_id: int, db: Session = Depends(get_db)):
 
 @router.post("/")
 def create_room(data: RoomCreate, db: Session = Depends(get_db)):
+    existing_room = db.query(Room).filter(
+        Room.building_id == data.building_id,
+        Room.room_number == data.room_number
+    ).first()
+
+    if existing_room:
+        raise HTTPException(status_code=400, detail="Room already exists in this building.")
+    
     building = db.query(Building).filter(Building.id == data.building_id).first()
     if not building:
         raise HTTPException(status_code=404, detail="Building not found.")

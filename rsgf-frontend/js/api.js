@@ -29,8 +29,19 @@ export async function getUsers() {
 }
 
 // Get reservations
-export async function getReservations() {
-    const res = await fetch(`${BASE_URL}/reservations/`);
+export async function getReservations(filters = {}) {
+    const params = new URLSearchParams();
+
+    if (filters.user_id != null) params.set("user_id", filters.user_id);
+    if (filters.room_id != null) params.set("room_id", filters.room_id);
+    if (filters.date != null) params.set("date", filters.date);
+
+    const query = params.toString();
+    const url = query
+        ? `${BASE_URL}/reservations/?${query}`
+        : `${BASE_URL}/reservations/`;
+
+    const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to load reservations");
     return res.json();
 }
@@ -48,6 +59,20 @@ export async function createReservation(data) {
     if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.detail || "Failed to create reservation");
+    }
+
+    return res.json();
+}
+
+// Cancel reservation
+export async function cancelReservation(reservationId) {
+    const res = await fetch(`${BASE_URL}/reservations/${reservationId}`, {
+        method: "DELETE"
+    });
+
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || "Failed to cancel reservation");
     }
 
     return res.json();

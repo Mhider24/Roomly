@@ -1,4 +1,12 @@
-import { getBuildings, getRooms } from "./api.js";
+import {
+    getBuildings,
+    getRooms,
+    getAllRooms,
+    getUsers,
+    getReservations,
+    createReservation,
+    cancelReservation
+} from "./api.js";
 
 const buildingNames = {
     cb: "College of Arts, Sciences, and Letters",
@@ -978,6 +986,109 @@ function getBuildingIdFromUrl() {
     return params.get("id");
 }
 
+let lastUsedUmid = "";
+
+function ensureMyReservationsContainer() {
+    let container = document.getElementById("my-reservations");
+
+    if (!container) {
+        container = document.createElement("div");
+        container.id = "my-reservations";
+        container.style.marginTop = "2rem";
+
+        const roomList = document.getElementById("room-list");
+        roomList.insertAdjacentElement("afterend", container);
+    }
+
+    return container;
+}
+
+async function renderMyReservations(umid) {
+    const container = ensureMyReservationsContainer();
+
+    if (!umid) {
+        container.innerHTML = `
+            <h3>My Reservations</h3>
+            <p>Make a reservation with your UMID to see and cancel it here.</p>
+        `;
+        return;
+    }
+
+    try {
+        const users = await getUsers();
+        const user = users.find(u => u.umid === umid);
+
+        if (!user) {
+            container.innerHTML = `
+                <h3>My Reservations</h3>
+                <p>No reservations found yet for UMID ${umid}.</p>
+            `;
+            return;
+        }
+
+        const reservations = await getReservations({ user_id: user.id });
+        const activeReservations = reservations.filter(r => r.status === "booked");
+
+        if (!activeReservations.length) {
+            container.innerHTML = `
+                <h3>My Reservations</h3>
+                <p>No active reservations for UMID ${umid}.</p>
+            `;
+            return;
+        }
+
+        const buildings = await getBuildings();
+        const rooms = await getAllRooms();
+
+        container.innerHTML = `
+            <h3>My Reservations</h3>
+            <ul style="list-style: none; padding-left: 0;">
+                ${activeReservations.map(r => {
+                    const room = rooms.find(room => room.id === r.room_id);
+                    const building = buildings.find(b => b.id === room?.building_id);
+
+                    return `
+                        <li style="margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #ccc; border-radius: 8px;">
+                            <div><strong>${building?.name || "Unknown Building"}</strong></div>
+                            <div>Room ${room?.room_number || r.room_id}</div>
+                            <div>${r.date}</div>
+                            <div>${r.start_time} - ${r.end_time}</div>
+                            <button
+                                type="button"
+                                class="cancel-res-btn"
+                                data-reservation-id="${r.id}"
+                                style="margin-top: 0.5rem;"
+                            >
+                                Cancel Reservation
+                            </button>
+                        </li>
+                    `;
+                }).join("")}
+            </ul>
+        `;
+
+        container.querySelectorAll(".cancel-res-btn").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const reservationId = btn.dataset.reservationId;
+
+                try {
+                    await cancelReservation(reservationId);
+                    alert("Reservation cancelled successfully.");
+                    await renderMyReservations(umid);
+                    await loadBuildingPage();
+                } catch (error) {
+                    alert(error.message);
+                }
+            });
+        });
+    } catch (error) {
+        container.innerHTML = `
+            <h3>My Reservations</h3>
+            <p>Error loading reservations: ${error.message}</p>
+        `;
+    }
+}
+
 function getFloorImagePath(floorplanPath) {
     return `${floorplanPath}?v=${FLOORPLAN_ASSET_VERSION}`;
 }
@@ -1058,25 +1169,26 @@ function renderRoomSummary(buildingId, roomListElement) {
     });
 
     document.getElementById("reservation-form").addEventListener("submit", async function (e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        const roomId   = document.getElementById("form-room-id").value;
-        const date     = document.getElementById("form-date").value;
-        const start    = document.getElementById("form-start").value;
-        const end      = document.getElementById("form-end").value;
-        const name     = document.getElementById("form-name").value.trim();
-        const umid     = document.getElementById("form-umid").value.trim();
-        const isOpen   = document.getElementById("form-open-invite").checked;
-        const errorEl  = document.getElementById("form-error");
+    const roomId = document.getElementById("form-room-id").value;
+    const date = document.getElementById("form-date").value;
+    const start = document.getElementById("form-start").value;
+    const end = document.getElementById("form-end").value;
+    const umid = document.getElementById("form-umid").value.trim();
+    const isOpen = document.getElementById("form-open-invite").checked;
+    const errorEl = document.getElementById("form-error");
 
-        if (end <= start) {
-            errorEl.textContent = "End time must be after start time.";
-            errorEl.hidden = false;
-            return;
-        }
+    if (end <= start) {
+        errorEl.textContent = "End time must be after start time.";
+        errorEl.hidden = false;
+        return;
+    }
 
+    try {
         const buildingCode = getBuildingIdFromUrl();
         const allBuildings = await getBuildings();
+
         const matchedBuilding = allBuildings.find(
             b => b.code?.toLowerCase() === buildingCode.toLowerCase()
         );
@@ -1092,37 +1204,29 @@ function renderRoomSummary(buildingId, roomListElement) {
             throw new Error(`Could not find backend room for room ${roomId}.`);
         }
 
-        try {
-            const res = await fetch("http://127.0.0.1:8001/reservations/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                room_id: backendRoom.id,
-                date,
-                start_time: start,
-                end_time: end,
-                reservation_name: name,
-                umid: umid,
-                is_open: isOpen
-            })
-            });
+        await createReservation({
+            room_id: backendRoom.id,
+            date,
+            start_time: start,
+            end_time: end,
+            umid,
+            is_open: isOpen
+        });
 
-            if (!res.ok) throw new Error(await res.text());
+        lastUsedUmid = umid;
+        errorEl.hidden = true;
+        errorEl.textContent = "";
 
-            errorEl.hidden = true;
-            errorEl.textContent = "";
+        document.getElementById("reservation-modal").hidden = true;
+        alert(`Room ${roomId} reserved successfully!`);
 
-            document.getElementById("reservation-modal").hidden = true;
-            alert(`Room ${roomId} reserved successfully!`);
-            loadBuildingPage();  // refresh statuses
-
-        } catch (err) {
-            errorEl.textContent = "Reservation failed: " + err.message;
-            errorEl.hidden = false;
-        }
-    });
-
-
+        await loadBuildingPage();
+        await renderMyReservations(umid);
+    } catch (err) {
+        errorEl.textContent = "Reservation failed: " + err.message;
+        errorEl.hidden = false;
+    }
+});
 
 function loadLeafletFloor(buildingId, floorplanPath) {
     const floorMapElement = document.getElementById("floor-map");
@@ -1243,33 +1347,41 @@ async function loadBuildingPage() {
         buildingNameElement.textContent = "No building selected";
         floorplanContainer.innerHTML = "<p>No floorplan available.</p>";
         roomListElement.innerHTML = "<p>Please return to the campus map and select a building.</p>";
+        await renderMyReservations(lastUsedUmid);
         return;
     }
 
     const buildingName = buildingNames[buildingId] || `Unknown Building (${buildingId})`;
     buildingNameElement.textContent = buildingName;
 
+    let matchedBuilding = null;
 
-    let backendId = null;
-    try{
-    const allBuildings = await fetch("http://127.0.0.1:8001/buildings/").then(r => r.json());
-    const match = allBuildings.find(b => b.name === buildingNames[buildingId]);
-    backendId = match?.id;
+    try {
+        const allBuildings = await getBuildings();
+        matchedBuilding = allBuildings.find(
+            b => b.code?.toLowerCase() === buildingId.toLowerCase()
+        );
     } catch (err) {
-        console.error("Backend fetch failed:", err);//Bugfinder3000
+        console.error("Backend fetch failed:", err);
     }
-    
-    if (backendId) {
-        const backendRooms = await fetch(`http://127.0.0.1:8001/rooms/?building_id=${backendId}`).then(r => r.json());
+
+    if (matchedBuilding) {
+        const backendRooms = await getRooms(matchedBuilding.id);
         const today = new Date().toISOString().split("T")[0];
 
         for (const floorIndex in roomOverlays[buildingId] || {}) {
             for (const room of roomOverlays[buildingId][floorIndex]) {
-                if (room.locked) continue; 
+                if (room.locked) continue;
+
                 const backendRoom = backendRooms.find(r => r.room_number === room.id);
                 if (backendRoom) {
-                    const reservations = await fetch(`http://127.0.0.1:8001/reservations/?room_id=${backendRoom.id}&date=${today}`).then(r => r.json());
-                    room.status = reservations.length > 0 ? "unavailable" : "available";
+                    const reservations = await getReservations({
+                        room_id: backendRoom.id,
+                        date: today
+                    });
+                    room.status = reservations.some(r => r.status === "booked")
+                        ? "unavailable"
+                        : "available";
                 }
             }
         }
@@ -1285,14 +1397,9 @@ async function loadBuildingPage() {
     }
 
     try {
-        const buildings = await getBuildings();
-
-        const matchedBuilding = allBuildings.find(
-             b => b.name === buildingNames[buildingCode]
-        );
-
         if (!matchedBuilding) {
             roomListElement.innerHTML = `<p>Could not match "${buildingId}" to backend building data yet.</p>`;
+            await renderMyReservations(lastUsedUmid);
             return;
         }
 
@@ -1300,6 +1407,7 @@ async function loadBuildingPage() {
 
         if (!rooms.length) {
             roomListElement.innerHTML = "<p>No rooms found for this building.</p>";
+            await renderMyReservations(lastUsedUmid);
             return;
         }
 
@@ -1317,6 +1425,8 @@ async function loadBuildingPage() {
     } catch (error) {
         roomListElement.innerHTML = `<p>Error loading rooms: ${error.message}</p>`;
     }
+
+    await renderMyReservations(lastUsedUmid);
 }
 
 loadBuildingPage();
